@@ -2,7 +2,11 @@
 
 ---
 
-Application is a Java 8 REST server storing employee information that can be retrieved/modified via HTTP calls. Application is using Jersey servlet framework. 
+Application is a Java 8 REST server storing employee information that can be retrieved/modified via HTTP calls. Application is using Jersey servlet framework.
+
+**EmployeeDatabase uses singleton design pattern to ensure only one instance exists, all that's necessary for simple application**
+
+**Run the project by importing pom.xml as a Maven project in Eclipse/Intellij using Java 1.8 as SDK**
 
 **On startup application asks for default security credentials which is used to authenticate DELETE calls**
 

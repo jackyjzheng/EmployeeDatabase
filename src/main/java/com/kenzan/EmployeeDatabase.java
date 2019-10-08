@@ -23,6 +23,14 @@ public class EmployeeDatabase {
         employeeDatabase = new HashMap<Integer, Employee>();
     }
 
+    // Singleton design pattern, ensuring only one database since application is simple
+    public static EmployeeDatabase getDatabase() {
+        if (instance == null) {
+            instance = new EmployeeDatabase();
+        }
+        return instance;
+    }
+
     /*
         Not a perfect solution against replay attacks, won't stop replay attacks that happen faster than
         expirationTime. But good simple authentication to prevent man-in-the-middle stealing credentials.
@@ -45,13 +53,6 @@ public class EmployeeDatabase {
 
     public void removeCredentials(String user) {
         userCredentials.remove(user);
-    }
-
-    public static EmployeeDatabase getDatabase() {
-        if (instance == null) {
-            instance = new EmployeeDatabase();
-        }
-        return instance;
     }
 
     Employee getEmployee(int id) {
