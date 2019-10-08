@@ -1,13 +1,8 @@
 package com.kenzan;
 
-import org.glassfish.jersey.logging.LoggingFeature;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Path("/employees")
 public class EmployeeResource {
@@ -25,6 +20,12 @@ public class EmployeeResource {
                 .build();
     }
 
+    /**
+     *
+     * @param id, Path parameter id of employee
+     * @return Response with either NOT_FOUND or OK,
+     *          If okay, return employee in either JSON or XML
+     */
     @GET
     @Path("/{id}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -39,6 +40,20 @@ public class EmployeeResource {
         }
     }
 
+    /**
+     *
+     * @param employee POST with employee object in request body in JSON Format
+     * exampleBody = {
+     *     "id": "4",
+     *     "firstName": "Jacky",
+     *     "middleInitial": "J",
+     *     "lastName": "Zheng",
+     *     "dateOfBirth": "1997-02-10",
+     *     "dateOfEmployment": "2019-10-10"
+     * }
+     * Middle initial is optional
+     * @return Response CREATED or CONFLICT if there is already Employee with same id in database
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addEmployee(
@@ -53,6 +68,13 @@ public class EmployeeResource {
                                 employee.getID())).build();
     }
 
+    /**
+     *
+     * @param id Path parameter id, will either create or replace Employee at that ID
+     * @param employee Same as with POST
+     * @return Response CREATED if there wasn't already employee with that ID, else OK
+     */
+
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -65,6 +87,12 @@ public class EmployeeResource {
         }
     }
 
+    /**
+     *
+     * @param header Include three authentication properties in header: username, time, and md5(username+password+time)
+     * @param id ID of employee that is to be deleted
+     * @return Response UNAUTHORIZED if incorrect credentials, OK if deleted, NOT_FOUND if not in database.
+     */
     @DELETE
     @Path("{id}")
     public Response deleteEmployee(@Context HttpHeaders header, @PathParam("id") int id) throws NoSuchAlgorithmException {

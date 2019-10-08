@@ -1,11 +1,14 @@
 package com.kenzan;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class EmployeeDatabase {
     private static HashMap<Integer, Employee> employeeDatabase;
@@ -110,4 +113,34 @@ public class EmployeeDatabase {
     }
 
     int numberOfEmployees() { return size; }
+
+    public void readFromFile(String filepath) throws IOException, ParseException {
+        File csvFile = new File(filepath);
+        if (csvFile.isFile()) {
+            try (BufferedReader csvReader = new BufferedReader(new FileReader(filepath));) {
+                String row;
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                while ((row = csvReader.readLine()) != null) {
+                    String[] data = row.split(",");
+                    if (data.length != 6) {
+                        continue;
+                    }
+                    int employeeId = Integer.parseInt(data[0]);
+                    String firstName = data[1];
+                    String middleInitial = data[2];
+                    String lastName = data[3];
+                    try {
+                        Date birthDate = format.parse(data[4]);
+                        Date employmentDate = format.parse(data[5]);
+                        addEmployee(new Employee(employeeId, firstName, middleInitial, lastName,
+                                birthDate, employmentDate));
+                    } catch (ParseException e) {
+                        continue;
+                    }
+                }
+            } catch (IOException e) {
+                return;
+            }
+        }
+    }
 }

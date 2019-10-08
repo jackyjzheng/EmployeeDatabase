@@ -1,8 +1,6 @@
 package com.kenzan;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
 
